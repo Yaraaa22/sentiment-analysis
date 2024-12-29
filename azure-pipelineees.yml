@@ -1,0 +1,25 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UsePythonVersion@1
+    inputs:
+      versionSpec: '3.x'
+      addToPath: true
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: |
+      python sentiment_analysis_tool.py
+    displayName: 'Run Sentiment Analysis'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: $(System.DefaultWorkingDirectory)
+      ArtifactName: drop
